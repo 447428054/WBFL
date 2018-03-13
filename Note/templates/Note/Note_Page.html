@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TianWen Note</title>
+</head>
+<body>
+<h1> {{note.title}}</h1>
+<br/>
+<h3>{{ note.content}}</h3>
+<br/><br/>
+<a href="{% url 'Note:Edit_page' note.id %}">修改笔记</a>
+</body>
+</html>

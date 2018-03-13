@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit_Page</title>
+</head>
+<body>
+<form action="{% url 'Note:Edit_action' %}" method="post">
+    {% csrf_token %}
+    {% if note %}
+    <input type="hidden" name="note_id" value="{{note.id}}"/>
+    <label> 笔记标题
+        <input type="text" name="title" value="{{note.title}}">
+    </label>
+    <br/>
+
+    <label> 笔记内容
+        <input type="text" name="content" value="{{note.content}}">
+    </label>
+    <br/><br/>
+    {% else %}
+    <input type="hidden" name="note_id" value="0"/>
+    <label> 笔记标题
+        <input type="text" name="title"/>
+    </label>
+    <br/>
+
+    <label> 笔记内容
+        <input type="text" name="content"/>
+    </label>
+    <br/><br/>
+    {% endif %}
+    <input type="submit" value="提交">
+</form>
+</body>
+</html>
