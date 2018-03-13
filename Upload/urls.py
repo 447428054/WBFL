@@ -1,10 +1,5 @@
 from django.conf.urls import url
-from django.contrib import admin
-
-import Upload.views as bv
-
+from .views import *
 urlpatterns = [
-    url(r'^$', bv.upload),
-
+    url(r'^$',registerNormalUser),
 ]
-app_name='Upload',
