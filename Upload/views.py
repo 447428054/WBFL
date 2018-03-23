@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from .models import NormalUser
 import docx
 import win32com
+import pythoncom
 from win32com.client import Dispatch, constants
 
 from pdfminer.pdfparser import PDFParser,PDFDocument
@@ -43,7 +44,7 @@ def registerNormalUser(request):
                 read_doc(request,path)
             elif suffix=='.pdf':
                 read_pdf(request,path)
-            elif suffix=='.ppt':
+            elif suffix=='.ppt'or suffix=='.pptx':
                 read_ppt(request, path)
 
             return HttpResponse('Upload Succeed!')#重定向显示内容（跳转后内容）
@@ -107,6 +108,7 @@ def read_ppt(request, path):
     store_path = r'F:\github\WBFL\uploadpath\\'  # txt文件保存的路径
     # fp = open(path, 'rb')  # 以二进制读模式打开
     file_name = path[path.rfind('\\') + 1:path.find('.')]  # 提取路径中的文件名,不包含后缀
+    pythoncom.CoInitialize()
 
     ppt = win32com.client.Dispatch('PowerPoint.Application')
     ppt.Visible = 1
@@ -122,7 +124,7 @@ def read_ppt(request, path):
         for j in range(1, shape_count + 1):
             if pptSel.Slides(i).Shapes(j).HasTextFrame:
                 s = pptSel.Slides(i).Shapes(j).TextFrame.TextRange.Text
-                f.write(s.encode('utf-8') + "\n")
+                f.write(s.encode('utf-8').decode() + "\n")
     f.close()
     ppt.Quit()
 
