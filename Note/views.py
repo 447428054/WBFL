@@ -5,12 +5,13 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from . import models
 import json
-
+from django.core import serializers
 
 # Create your views here.
 
+
 def AllNotes(request):
-    notes = models.Note.objects.all()
+    notes =serializers.serialize("json", models.Note.objects.all())
     Notes = json.dumps(notes , ensure_ascii=False)
     return HttpResponse(Notes)
 
