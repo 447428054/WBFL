@@ -13,38 +13,38 @@ from django.core import serializers
 def AllNotes(request):
     notes =serializers.serialize("json", models.Note.objects.all())
     Notes = json.dumps(notes , ensure_ascii=False)
-    return HttpResponse(Notes)
+    return HttpResponse(Notes,content_type='application/json')
 
 
 def Note_Page(request, note_id):
-    note = models.Note.objects.get(pk=note_id)
+    note = serializers.serialize("json",models.Note.objects.get(pk=note_id))
     Note= json.dumps(note, ensure_ascii=False)
-    return HttpResponse(Note)
+    return HttpResponse(Note,content_type='application/json')
 
 
 def Edit_Page(request, note_id):
     if str(note_id) == '0':
         return render(request, 'Note/Edit_Page.html')
-    note = models.Note.objects.get(pk=note_id)
+    note = serializers.serialize("json",models.Note.objects.get(pk=note_id))
     Note=json.dumps(note, ensure_ascii=False)
-    return HttpResponse(Note)
+    return HttpResponse(Note,content_type='application/json')
 
 
 def Edit_action(request):
-    if request.method =='Get':
+    if request.method =='Post':
         title = request.POST.get('title', 'TITLE')
         content = request.POST.get('content', 'CONTENT')
         note_id= request.POST.get('note_id', '0')
 
         if note_id == '0':
             models.Note.objects.create(title=title, content=content)
-            notes = models.Note.objects.all()
+            notes =serializers.serialize("json", models.Note.objects.all())
             Notes=json.dumps(notes, ensure_ascii=False)
-            return HttpResponse(Notes)
+            return HttpResponse(Notes,content_type='application/json')
 
-        note=models.Note.objects.get(pk=note_id)
+        note=serializers.serialize("json",models.Note.objects.get(pk=note_id))
         note.title = title
         note.content = content
         note.save()
         Note=json.dumps(note, ensure_ascii=False)
-        return HttpResponse(Note)
+        return HttpResponse(Note,content_type='application/json')
