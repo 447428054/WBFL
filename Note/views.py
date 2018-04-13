@@ -7,26 +7,35 @@ from . import models
 import json
 from django.core import serializers
 
+
 # Create your views here.
+def toDicts(objects):
+    obj_arr = []
+    for o in objects:
+        obj_arr.append(o.toDict())
+    return obj_arr
 
 
 def AllNotes(request):
-    notes =serializers.serialize("json", models.Note.objects.all())
-    Notes = json.dumps(notes , ensure_ascii=False)
+    notes =models.Note.objects.all()
+    notes_dicts=toDicts(notes)
+    Notes = json.dumps(notes_dicts , ensure_ascii=False)
     return HttpResponse(Notes,content_type='application/json')
 
 
 def Note_Page(request, note_id):
-    note = serializers.serialize("json",models.Note.objects.get(pk=note_id))
-    Note= json.dumps(note, ensure_ascii=False)
+    note = models.Note.objects.get(pk=note_id)
+    note_dict=toDicts(note)
+    Note= json.dumps(note_dict, ensure_ascii=False)
     return HttpResponse(Note,content_type='application/json')
 
 
 def Edit_Page(request, note_id):
     if str(note_id) == '0':
         return render(request, 'Note/Edit_Page.html')
-    note = serializers.serialize("json",models.Note.objects.get(pk=note_id))
-    Note=json.dumps(note, ensure_ascii=False)
+    note = models.Note.objects.get(pk=note_id)
+    note_dict=toDicts(note)
+    Note=json.dumps(note_dict, ensure_ascii=False)
     return HttpResponse(Note,content_type='application/json')
 
 
@@ -38,13 +47,15 @@ def Edit_action(request):
 
         if note_id == '0':
             models.Note.objects.create(title=title, content=content)
-            notes =serializers.serialize("json", models.Note.objects.all())
-            Notes=json.dumps(notes, ensure_ascii=False)
+            note =models.Note.objects.all()
+            note_dicts=toDicts(note)
+            Notes=json.dumps(note_dicts, ensure_ascii=False)
             return HttpResponse(Notes,content_type='application/json')
 
-        note=serializers.serialize("json",models.Note.objects.get(pk=note_id))
+        note=models.Note.objects.get(pk=note_id)
         note.title = title
         note.content = content
         note.save()
-        Note=json.dumps(note, ensure_ascii=False)
+        note_dict=toDicts(note)
+        Note=json.dumps(note_dict, ensure_ascii=False)
         return HttpResponse(Note,content_type='application/json')
