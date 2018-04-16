@@ -14,4 +14,4 @@ class Note(models.Model):
 
 
     def toDict(self):
-        return {'Title':self.title, 'Content':self.content,'Summary':self.summary,'Label':self.label}
+        return {'Title':self.title, 'Content':self.content,'Summary':self.Summary,'Label':self.Label}
