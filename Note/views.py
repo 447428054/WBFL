@@ -46,14 +46,15 @@ def Edit_Page(request, note_id):
 
 
 def Edit_action(request):
-    if request.method =='Post':
-        title = request.POST.get('title', 'TITLE')
-        content = request.POST.get('content', 'CONTENT')
+    if request.method =='POST':
+        temp=json.load[request.body]
+        title = temp['title', 'TITLE']
+        content = temp['content', 'CONTENT']
         (Summay,Label)=finalGet(content,5)
-        note_id= request.POST.get('note_id', '0')
+        note_id= temp['note_id', '0']
 
         if note_id == '0':
-            models.Note.objects.create(title=title, content=content,summay=summay,label=label)
+            models.Note.objects.create(title=title, content=content,Summay=Summay,Label=Label)
             note =models.Note.objects.all()
             note_dicts=toDicts(note)
             Notes=json.dumps(note_dicts, ensure_ascii=False)
